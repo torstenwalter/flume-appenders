@@ -8,10 +8,10 @@
         <artifactId>flume-appenders</artifactId>
         <version>0.1.0</version>
     </parent>
-    <artifactId>logback-flume-appender</artifactId>
+    <artifactId>appender-test</artifactId>
     <packaging>jar</packaging>
 
-    <name>Logback Flume appender</name>
+    <name>Test project for appenders</name>
 
     <build>
         <pluginManagement>
@@ -30,15 +30,15 @@
     <dependencies>
 
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.1.1</version>
+            <groupId>com.gilt</groupId>
+            <artifactId>logback-flume-appender</artifactId>
+            <version>0.1.0</version>
         </dependency>
 
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.1.1</version>
+            <groupId>com.gilt</groupId>
+            <artifactId>log4j-flume-appender</artifactId>
+            <version>0.1.0</version>
         </dependency>
 
     </dependencies>

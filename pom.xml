@@ -20,6 +20,7 @@
     <modules>
         <module>logback-flume-appender</module>
         <module>log4j-flume-appender</module>
+        <module>appender-test</module>
     </modules>
 
     <build>
@@ -45,6 +46,16 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.flume</groupId>
+            <artifactId>flume-ng-sdk</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+    </dependencies>
+
+
     <distributionManagement>
         <repository>
             <id>bintray</id>
