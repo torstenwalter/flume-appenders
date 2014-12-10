@@ -8,10 +8,10 @@
         <artifactId>flume-appenders</artifactId>
         <version>0.1.0</version>
     </parent>
-    <artifactId>logback-flume-appender</artifactId>
+    <artifactId>log4j-flume-appender</artifactId>
     <packaging>jar</packaging>
 
-    <name>Logback Flume appender</name>
+    <name>Log4J Flume appender</name>
 
     <build>
         <pluginManagement>
