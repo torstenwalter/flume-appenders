@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.gilt</groupId>
         <artifactId>flume-appenders</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
     <artifactId>appender-test</artifactId>
     <packaging>jar</packaging>
@@ -32,13 +32,13 @@
         <dependency>
             <groupId>com.gilt</groupId>
             <artifactId>logback-flume-appender</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.gilt</groupId>
             <artifactId>log4j-flume-appender</artifactId>
-            <version>0.1.0</version>
+            <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
