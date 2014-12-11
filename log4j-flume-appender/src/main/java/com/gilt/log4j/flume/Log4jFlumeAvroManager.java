@@ -91,7 +91,6 @@ public class Log4jFlumeAvroManager {
 
   public void send(Event event) {
     if (event != null) {
-      logger.info("Queuing a new event: " + event.toString());
       evQueue.add(event);
     } else {
       logger.warn("Trying to send a NULL event");
