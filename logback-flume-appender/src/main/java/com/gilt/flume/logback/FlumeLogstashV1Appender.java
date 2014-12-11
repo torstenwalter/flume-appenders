@@ -1,4 +1,4 @@
-package com.gilt.logback.flume;
+package com.gilt.flume.logback;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Layout;

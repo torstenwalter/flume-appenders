@@ -1,4 +1,4 @@
-package com.gilt.log4j.flume;
+package com.gilt.flume.log4j;
 
 import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
