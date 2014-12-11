@@ -4,7 +4,7 @@
                              http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.gilt</groupId>
+    <groupId>com.gilt.flume</groupId>
     <artifactId>flume-appenders</artifactId>
     <packaging>pom</packaging>
     <version>0.1.0-SNAPSHOT</version>
@@ -60,7 +60,7 @@
         <repository>
             <id>bintray</id>
             <name>giltgroupe-maven</name>
-            <url>https://api.bintray.com/maven/giltgroupe/maven/com.gilt.logback/</url>
+            <url>https://api.bintray.com/maven/giltgroupe/maven/com.gilt.flume/</url>
         </repository>
     </distributionManagement>
 </project>
