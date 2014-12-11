@@ -3,10 +3,14 @@ package com.gilt.flume.logback;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
+import com.gilt.flume.logging.FlumeAvroManager;
+import com.gilt.flume.logging.LoggingAdapterFactory;
+import com.gilt.flume.logging.RemoteFlumeAgent;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flume.Event;
 import org.apache.flume.FlumeException;
 import org.apache.flume.event.EventBuilder;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -16,6 +20,8 @@ import java.util.*;
 public class FlumeLogstashV1Appender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
   protected static final Charset UTF_8 = Charset.forName("UTF-8");
+
+  private static final LoggingAdapterFactory loggingFactory = new LogbackAdapterFactory();
 
   private FlumeAvroManager flumeManager;
 
@@ -116,7 +122,7 @@ public class FlumeLogstashV1Appender extends UnsynchronizedAppenderBase<ILogging
 
       List<RemoteFlumeAgent> agents = new ArrayList<RemoteFlumeAgent>(agentConfigs.length);
       for (String conf : agentConfigs) {
-        RemoteFlumeAgent agent = RemoteFlumeAgent.fromString(conf.trim());
+        RemoteFlumeAgent agent = RemoteFlumeAgent.fromString(conf.trim(), loggingFactory);
         if (agent != null) {
           agents.add(agent);
         } else {
@@ -126,7 +132,8 @@ public class FlumeLogstashV1Appender extends UnsynchronizedAppenderBase<ILogging
       Properties overrides = new Properties();
       overrides.putAll(extractProperties(flumeProperties));
       flumeManager = FlumeAvroManager.create(agents, overrides,
-              batchSize, reportingWindow, reporterMaxThreadPoolSize, reporterMaxQueueSize, this);
+              batchSize, reportingWindow, reporterMaxThreadPoolSize, reporterMaxQueueSize,
+              loggingFactory);
     } else {
       addError("Cannot configure a flume agent with an empty configuration");
     }
