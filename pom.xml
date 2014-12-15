@@ -58,7 +58,7 @@
         <repository>
             <id>bintray</id>
             <name>giltgroupe-maven</name>
-            <url>https://api.bintray.com/maven/giltgroupe/maven/com.gilt.flume/</url>
+            <url>https://api.bintray.com/maven/giltgroupe/maven/flume-appenders/</url>
         </repository>
     </distributionManagement>
 </project>
