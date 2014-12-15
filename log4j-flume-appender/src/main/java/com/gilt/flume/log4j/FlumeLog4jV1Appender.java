@@ -1,5 +1,8 @@
 package com.gilt.flume.log4j;
 
+import com.gilt.flume.logging.FlumeAvroManager;
+import com.gilt.flume.logging.LoggingAdapterFactory;
+import com.gilt.flume.logging.RemoteFlumeAgent;
 import org.apache.commons.lang.StringUtils;
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
@@ -18,7 +21,7 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
     protected static final Charset UTF_8 = Charset.forName("UTF-8");
 
-    private Log4jFlumeAvroManager flumeManager;
+    private FlumeAvroManager flumeManager;
 
     private String flumeAgents;
 
@@ -44,6 +47,8 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
     private static final Logger logger = LoggerFactory.getLogger(FlumeLog4jV1Appender.class);
 
+    private static final LoggingAdapterFactory loggingFactory = new Log4JAdapterFactory();
+
     private boolean activated = false;
 
     @Override
@@ -60,7 +65,7 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
             List<RemoteFlumeAgent> agents = new ArrayList<RemoteFlumeAgent>(agentConfigs.length);
             for (String conf : agentConfigs) {
-                RemoteFlumeAgent agent = RemoteFlumeAgent.fromString(conf.trim());
+                RemoteFlumeAgent agent = RemoteFlumeAgent.fromString(conf.trim(), loggingFactory);
                 if (agent != null) {
                     agents.add(agent);
                 } else {
@@ -69,8 +74,9 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
             }
             Properties overrides = new Properties();
             overrides.putAll(extractProperties(flumeProperties));
-            flumeManager = Log4jFlumeAvroManager.create(agents, overrides,
-                    batchSize, reportingWindow, reporterMaxThreadPoolSize, reporterMaxQueueSize);
+            flumeManager = FlumeAvroManager.create(agents, overrides,
+                batchSize, reportingWindow, reporterMaxThreadPoolSize, reporterMaxQueueSize,
+                loggingFactory);
         } else {
             logger.warn("Cannot configure a flume agent with an empty configuration");
         }

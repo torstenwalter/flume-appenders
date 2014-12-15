@@ -8,10 +8,10 @@
         <artifactId>flume-appenders</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>log4j-flume-appender</artifactId>
+    <artifactId>logging-flume-commons</artifactId>
     <packaging>jar</packaging>
 
-    <name>Log4J Flume appender</name>
+    <name>Logback Flume appender</name>
 
     <build>
         <pluginManagement>
@@ -26,19 +26,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <dependencies>
-       <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.gilt.flume</groupId>
-            <artifactId>logging-flume-commons</artifactId>
-            <version>0.1.0-SNAPSHOT</version>
-        </dependency>
-
-    </dependencies>
 </project>

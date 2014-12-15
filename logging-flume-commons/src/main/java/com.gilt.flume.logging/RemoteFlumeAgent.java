@@ -1,12 +1,8 @@
-package com.gilt.flume.log4j;
+package com.gilt.flume.logging;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class RemoteFlumeAgent {
-
-    private static final Logger logger = LoggerFactory.getLogger(RemoteFlumeAgent.class);
 
     private final String hostname;
 
@@ -25,7 +21,9 @@ public final class RemoteFlumeAgent {
         return port;
     }
 
-    public static RemoteFlumeAgent fromString(String input) {
+    public static RemoteFlumeAgent fromString(final String input, final LoggingAdapterFactory loggingAdapterFactory) {
+        final LoggingAdapter logger = loggingAdapterFactory.create(RemoteFlumeAgent.class);
+
         if(StringUtils.isNotEmpty(input)) {
 
             String[] parts = input.split(":");

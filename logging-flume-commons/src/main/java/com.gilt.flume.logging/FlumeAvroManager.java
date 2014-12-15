@@ -1,6 +1,5 @@
-package com.gilt.flume.logback;
+package com.gilt.flume.logging;
 
-import ch.qos.logback.core.spi.ContextAware;
 import org.apache.flume.Event;
 
 import java.util.List;
@@ -13,12 +12,14 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class FlumeAvroManager {
 
+  private final LoggingAdapter logger;
+
+  private final LoggingAdapterFactory loggerFactory;
+
   private static final AtomicLong threadSequence = new AtomicLong(1);
 
   private static final int MAX_RECONNECTS = 3;
   private static final int MINIMUM_TIMEOUT = 1000;
-
-  private final ContextAware loggingContext;
 
   private final static long MAXIMUM_REPORTING_MILLIS = 10 * 1000;
   private final static long MINIMUM_REPORTING_MILLIS = 100;
@@ -39,14 +40,15 @@ public class FlumeAvroManager {
       final Long reportingWindow,
       final Integer reporterMaxThreadPoolSize,
       final Integer reporterMaxQueueSize,
-      final ContextAware context) {
+      final LoggingAdapterFactory loggerFactory) {
 
       if (agents != null && agents.size() > 0) {
         Properties props = buildFlumeProperties(agents);
         props.putAll(overrides);
-        return new FlumeAvroManager(props, reportingWindow, batchSize, reporterMaxThreadPoolSize, reporterMaxQueueSize, context);
+        return new FlumeAvroManager(props, reportingWindow, batchSize, reporterMaxThreadPoolSize,
+              reporterMaxQueueSize, loggerFactory);
       } else {
-        context.addError("No valid agents configured");
+        loggerFactory.create(FlumeAvroManager.class).error("No valid agents configured");
       }
 
     return null;
@@ -57,20 +59,21 @@ public class FlumeAvroManager {
                            final Integer batchSizeReq,
                            final Integer reporterMaxThreadPoolSizeReq,
                            final Integer reporterMaxQueueSizeReq,
-                           final ContextAware context) {
-    this.loggingContext = context;
+                           final LoggingAdapterFactory loggerFactory) {
 
+    this.logger = loggerFactory.create(FlumeAvroManager.class);
+    this.loggerFactory = loggerFactory;
     final int reporterMaxThreadPoolSize = reporterMaxThreadPoolSizeReq == null ?
             DEFAULT_REPORTER_MAX_THREADPOOL_SIZE : reporterMaxThreadPoolSizeReq;
     final int reporterMaxQueueSize = reporterMaxQueueSizeReq == null ?
             DEFAULT_REPORTER_MAX_QUEUE_SIZE : reporterMaxQueueSizeReq;
 
-    this.reporter = new EventReporter(props, loggingContext, reporterMaxThreadPoolSize, reporterMaxQueueSize);
+    this.reporter = new EventReporter(props, reporterMaxThreadPoolSize, reporterMaxQueueSize, loggerFactory);
     this.evQueue = new ArrayBlockingQueue<Event>(1000);
     final long reportingWindow = hamonizeReportingWindow(reportingWindowReq);
     final int batchSize = batchSizeReq == null ? DEFAULT_BATCH_SIZE : batchSizeReq;
     this.asyncThread = new AsyncThread(evQueue, batchSize, reportingWindow);
-    loggingContext.addInfo("Created a new flume agent with properties: " + props.toString());
+    logger.info("Created a new flume agent with properties: " + props.toString());
     asyncThread.start();
   }
 
@@ -93,10 +96,9 @@ public class FlumeAvroManager {
 
   public void send(Event event) {
     if (event != null) {
-      loggingContext.addInfo("Queuing a new event: " + event.toString());
       evQueue.add(event);
     } else {
-      loggingContext.addWarn("Trying to send a NULL event");
+      logger.warn("Trying to send a NULL event");
     }
   }
 
@@ -145,7 +147,7 @@ public class FlumeAvroManager {
       this.reportingWindow = reportingWindow;
       setDaemon(true);
       setName("FlumeAvroManager-" + threadSequence.getAndIncrement());
-      loggingContext.addInfo("Started a new " + AsyncThread.class.getSimpleName() + " thread");
+      logger.info("Started a new " + AsyncThread.class.getSimpleName() + " thread");
     }
 
     @Override
@@ -165,7 +167,7 @@ public class FlumeAvroManager {
             }
           }
         } catch (InterruptedException ie) {
-          loggingContext.addWarn(ie.getLocalizedMessage(), ie);
+          logger.warn(ie.getLocalizedMessage(), ie);
         }
         if(count > 0) {
           Event[] batch;
@@ -175,11 +177,11 @@ public class FlumeAvroManager {
             batch = new Event[count];
             System.arraycopy(events, 0, batch, 0, count);
           }
-          loggingContext.addInfo("Sending " + count + " event(s) to the EventReporter");
+          logger.info("Sending " + count + " event(s) to the EventReporter");
           try{
             reporter.report(batch);
           } catch (RejectedExecutionException ex) {
-            loggingContext.addError("Logging events batch rejected by EventReporter. Check reporter connectivity or " +
+            logger.error("Logging events batch rejected by EventReporter. Check reporter connectivity or " +
                     "consider increasing reporterMaxThreadPoolSize or reporterMaxQueueSize", ex);
           }
         }
@@ -189,7 +191,7 @@ public class FlumeAvroManager {
     }
 
     public void shutdown() {
-      loggingContext.addInfo("Shutting down command received");
+      logger.error("Shutting down command received");
       shutdown = true;
     }
   }

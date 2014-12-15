@@ -1,11 +1,9 @@
-package com.gilt.flume.log4j;
+package com.gilt.flume.logging;
 
 import org.apache.flume.Event;
 import org.apache.flume.EventDeliveryException;
 import org.apache.flume.api.RpcClient;
 import org.apache.flume.api.RpcClientFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Properties;
@@ -15,13 +13,15 @@ public class EventReporter {
 
   private RpcClient client;
 
-  private final Logger logger = LoggerFactory.getLogger(getClass());
+  private final LoggingAdapter logger;
 
   private final ExecutorService es;
 
   private final Properties connectionProps;
 
-  public EventReporter(final Properties properties, final int maximumThreadPoolSize, final int maxQueueSize) {
+  public EventReporter(final Properties properties, final int maximumThreadPoolSize, final int maxQueueSize,
+                       final LoggingAdapterFactory loggingFactory) {
+    this.logger = loggingFactory.create(EventReporter.class);
     BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<Runnable>(maxQueueSize);
     this.connectionProps = properties;
 
@@ -65,8 +65,6 @@ public class EventReporter {
   }
 
   private class ReportingJob implements Runnable {
-
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private static final int retries = 3;
 
