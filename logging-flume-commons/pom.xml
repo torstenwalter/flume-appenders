@@ -11,19 +11,10 @@
     <artifactId>logging-flume-commons</artifactId>
     <packaging>jar</packaging>
 
-    <name>Logback Flume appender</name>
+    <name>Common logic for Flume appenders</name>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <configuration>
-                        <testFailureIgnore>true</testFailureIgnore>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+    <properties>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
+
 </project>
