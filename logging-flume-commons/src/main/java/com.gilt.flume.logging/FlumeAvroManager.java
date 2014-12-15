@@ -177,7 +177,6 @@ public class FlumeAvroManager {
             batch = new Event[count];
             System.arraycopy(events, 0, batch, 0, count);
           }
-          logger.info("Sending " + count + " event(s) to the EventReporter");
           try{
             reporter.report(batch);
           } catch (RejectedExecutionException ex) {
