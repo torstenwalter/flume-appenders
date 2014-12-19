@@ -101,7 +101,7 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
       flumeManager.send(event);
     } catch (Exception e) {
-      logger.error(e.getLocalizedMessage(), e);
+        e.printStackTrace(System.err);
     }
   }
 
