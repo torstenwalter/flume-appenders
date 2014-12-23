@@ -104,7 +104,7 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
   @Override
   public void close() {
-
+    flumeManager.stop();
   }
 
   @Override
