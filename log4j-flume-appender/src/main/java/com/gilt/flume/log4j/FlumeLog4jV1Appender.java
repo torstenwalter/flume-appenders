@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
 import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Layout;
 import org.apache.log4j.spi.LoggingEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +38,6 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
   private String application;
 
-  protected Layout layout;
-
   private String hostname;
 
   private String type;
@@ -53,7 +50,7 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
   @Override
   public void activateOptions() {
-    if (layout == null) {
+    if (getLayout() == null) {
       logger.warn("Layout was not defined, will only log the message, no stack traces or custom layout");
     }
     if (StringUtils.isEmpty(application)) {
@@ -90,7 +87,7 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
       if (!activated) {
         activateOptions();
       }
-      String body = layout != null ? getLayout().format(eventObject) : eventObject.getMessage().toString();
+      String body = getLayout() != null ? getLayout().format(eventObject) : eventObject.getMessage().toString();
       Map<String, String> headers = new HashMap<String, String>();
       if (additionalAvroHeaders != null) {
         headers.putAll(additionalAvroHeaders);
@@ -176,10 +173,6 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
   public void setApplication(String application) {
     this.application = application;
-  }
-
-  public void setLayout(Layout layout) {
-    this.layout = layout;
   }
 
   public void setFlumeAgents(String flumeAgents) {
