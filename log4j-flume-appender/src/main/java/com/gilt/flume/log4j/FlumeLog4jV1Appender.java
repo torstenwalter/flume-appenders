@@ -7,9 +7,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
 import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -42,7 +41,7 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
   private String type;
 
-  private static final Logger logger = LoggerFactory.getLogger(FlumeLog4jV1Appender.class);
+  private static final Logger logger = Logger.getLogger(FlumeLog4jV1Appender.class);
 
   private static final LoggingAdapterFactory loggingFactory = new Log4JAdapterFactory();
 
