@@ -4,14 +4,14 @@
     <groupId>com.gilt.flume</groupId>
     <artifactId>flume-appenders</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.7-SNAPSHOT</version>
+    <version>0.1.7</version>
     <name>Flume appenders</name>
 
     <scm>
         <connection>scm:git:ssh://github.com/gilt/flume-appenders.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/gilt/flume-appenders.git</developerConnection>
         <url>https://github.com/gilt/flume-appenders</url>
-        <tag>HEAD</tag>
+        <tag>v0.1.7</tag>
     </scm>
 
     <modules>
