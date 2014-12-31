@@ -6,7 +6,7 @@ import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import com.gilt.flume.logging.FlumeAvroManager;
 import com.gilt.flume.logging.LoggingAdapterFactory;
 import com.gilt.flume.logging.RemoteFlumeAgent;
-import org.apache.commons.lang.StringUtils;
+import com.gilt.flume.logging.StringUtils;
 import org.apache.flume.Event;
 import org.apache.flume.FlumeException;
 import org.apache.flume.event.EventBuilder;

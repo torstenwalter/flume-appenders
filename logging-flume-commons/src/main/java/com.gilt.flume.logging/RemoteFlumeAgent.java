@@ -1,7 +1,5 @@
 package com.gilt.flume.logging;
 
-import org.apache.commons.lang.StringUtils;
-
 public final class RemoteFlumeAgent {
 
     private final String hostname;

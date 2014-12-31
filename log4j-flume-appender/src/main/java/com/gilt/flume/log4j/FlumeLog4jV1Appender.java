@@ -3,7 +3,7 @@ package com.gilt.flume.log4j;
 import com.gilt.flume.logging.FlumeAvroManager;
 import com.gilt.flume.logging.LoggingAdapterFactory;
 import com.gilt.flume.logging.RemoteFlumeAgent;
-import org.apache.commons.lang.StringUtils;
+import com.gilt.flume.logging.StringUtils;
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
 import org.apache.log4j.AppenderSkeleton;
@@ -49,35 +49,39 @@ public class FlumeLog4jV1Appender extends AppenderSkeleton {
 
   @Override
   public void activateOptions() {
-    if (getLayout() == null) {
-      logger.warn("Layout was not defined, will only log the message, no stack traces or custom layout");
-    }
-    if (StringUtils.isEmpty(application)) {
-      application = resolveApplication();
-    }
-
-    if (StringUtils.isNotEmpty(flumeAgents)) {
-      String[] agentConfigs = flumeAgents.split(",");
-
-      List<RemoteFlumeAgent> agents = new ArrayList<RemoteFlumeAgent>(agentConfigs.length);
-      for (String conf : agentConfigs) {
-        RemoteFlumeAgent agent = RemoteFlumeAgent.fromString(conf.trim(), loggingFactory);
-        if (agent != null) {
-          agents.add(agent);
-        } else {
-          logger.warn("Cannot build a Flume agent config for '" + conf + "'");
-        }
+    try {
+      if (getLayout() == null) {
+        logger.warn("Layout was not defined, will only log the message, no stack traces or custom layout");
       }
-      Properties overrides = new Properties();
-      overrides.putAll(extractProperties(flumeProperties));
-      flumeManager = FlumeAvroManager.create(agents, overrides,
-          batchSize, reportingWindow, reporterMaxThreadPoolSize, reporterMaxQueueSize,
-          loggingFactory);
-    } else {
-      logger.warn("Cannot configure a flume agent with an empty configuration");
+      if (StringUtils.isEmpty(application)) {
+        application = resolveApplication();
+      }
+
+      if (StringUtils.isNotEmpty(flumeAgents)) {
+        String[] agentConfigs = flumeAgents.split(",");
+
+        List<RemoteFlumeAgent> agents = new ArrayList<RemoteFlumeAgent>(agentConfigs.length);
+        for (String conf : agentConfigs) {
+          RemoteFlumeAgent agent = RemoteFlumeAgent.fromString(conf.trim(), loggingFactory);
+          if (agent != null) {
+            agents.add(agent);
+          } else {
+            logger.warn("Cannot build a Flume agent config for '" + conf + "'");
+          }
+        }
+        Properties overrides = new Properties();
+        overrides.putAll(extractProperties(flumeProperties));
+        flumeManager = FlumeAvroManager.create(agents, overrides,
+            batchSize, reportingWindow, reporterMaxThreadPoolSize, reporterMaxQueueSize,
+            loggingFactory);
+      } else {
+        logger.warn("Cannot configure a flume agent with an empty configuration");
+      }
+      super.activateOptions();
+      activated = true;
+    } catch (Exception e) {
+      logger.error(e.getLocalizedMessage(),e);
     }
-    super.activateOptions();
-    activated = true;
   }
 
   @Override
